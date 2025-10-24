@@ -14,14 +14,12 @@ export default function Login() {
             <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
         </div>
 
-        {/* Kartu Login */}
         <div className="relative w-full max-w-md bg-white p-8 sm:p-12 rounded-2xl border-2 border-black shadow-[2px_5px_5px_#000000]">
             <h1 className="text-3xl font-bold text-center mb-8 text-black">
             Masuk
             </h1>
 
             <form className="space-y-6">
-            {/* Input Email */}
             <div>
                 <label
                 htmlFor="email"
@@ -80,7 +78,6 @@ export default function Login() {
                 </button>
             </div>
 
-            {/* Tombol Google */}
             <div>
                 <button
                 type="button"

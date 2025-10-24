@@ -67,3 +67,19 @@ body {
   background-position: center;
   background-size: cover;
 }
+
+.dashboard-page {
+  min-height: 100vh;
+  background: white;
+  position: relative;
+}
+
+.dashboard-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url(/AKSARA.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
