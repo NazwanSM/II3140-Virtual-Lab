@@ -16,6 +16,7 @@ interface DashboardCardProps {
     imageScale?: number;
     rotationClass?: string;
     zIndexClass?: string;
+    onClick?: () => void;
 }
 
 export default function DashboardCard({
@@ -33,6 +34,7 @@ export default function DashboardCard({
     imageScale = 1,
     rotationClass = '',
     zIndexClass = 'z-10',
+    onClick,
 }: DashboardCardProps) {
     const sizeClasses = {
         small: 'h-32',
@@ -60,6 +62,7 @@ export default function DashboardCard({
 
     return (
         <div
+            onClick={onClick}
             className={`group relative w-full max-w-xs md:w-80 h-[500px] ${bgColor} rounded-3xl shadow-xl overflow-hidden
                         transform ${rotationClass} transition-all duration-300 ease-in-out
                         hover:rotate-0 hover:scale-105 hover:-translate-y-4 hover:z-30 ${zIndexClass} cursor-pointer`}

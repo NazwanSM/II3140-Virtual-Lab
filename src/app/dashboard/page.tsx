@@ -2,8 +2,10 @@
 
 import DashboardCard from '@/components/dashboardCard';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function Dashboard() {
+    const router = useRouter();
     return (
         <div className="dashboard-page p-6 md:p-10 font-sans" >
         <header className="flex justify-between items-center mb-8 relative z-10">
@@ -49,6 +51,7 @@ export default function Dashboard() {
                 imageObjectFit="contain"
                 imageAlign="right"
                 imageScale={1.1}
+                onClick={() => router.push('/belajar')}
             />
 
             <DashboardCard

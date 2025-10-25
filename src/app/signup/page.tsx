@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
 
     return (
         <div className="relative flex min-h-screen items-center justify-center p-4">
@@ -115,9 +117,9 @@ export default function Login() {
             </div>
 
             <div className="text-sm text-center text-gray-600">
-                Belum punya akun?{" "}
-                <a href="#" className="font-bold text-black hover:underline">
-                Daftar Sekarang
+                Sudah punya akun?{" "}
+                <a href="#" className="font-bold text-black hover:underline" onClick={() => router.push('/login')}>
+                Masuk Sekarang
                 </a>
             </div>
             </form>
