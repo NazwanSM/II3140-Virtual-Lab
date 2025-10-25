@@ -27,17 +27,14 @@ export default function Belajar() {
 
     const handleModulClick = (materiId: number) => {
         console.log(`Modul clicked for materi ${materiId}`);
-        // Tambahkan navigasi atau logic di sini
     };
 
     const handleVideoClick = (materiId: number) => {
         console.log(`Video clicked for materi ${materiId}`);
-        // Tambahkan navigasi atau logic di sini
     };
 
     const handleLatihanClick = (materiId: number) => {
         console.log(`Latihan clicked for materi ${materiId}`);
-        // Tambahkan navigasi atau logic di sini
     };
 
     return (
