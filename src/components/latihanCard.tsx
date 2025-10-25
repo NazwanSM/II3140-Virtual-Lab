@@ -1,26 +1,28 @@
+"use client";
+
 import Image from 'next/image';
 
-interface MateriCardProps {
+interface LatihanCardProps {
     materiNumber: number;
     title: string;
     thumbnail: string;
     progress: number;
-    onModulClick?: () => void;
-    onVideoClick?: () => void;
-    onLatihanClick?: () => void;
+    onMudahClick?: () => void;
+    onSedangClick?: () => void;
+    onSulitClick?: () => void;
 }
 
-export default function MateriCard({
+export default function LatihanCard({
     materiNumber,
     title,
     thumbnail,
     progress,
-    onModulClick,
-    onVideoClick,
-    onLatihanClick,
-}: MateriCardProps) {
+    onMudahClick,
+    onSedangClick,
+    onSulitClick,
+}: LatihanCardProps) {
     return (
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl duration-300 w-full max-w-sm transition-all hover:scale-105">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 w-full max-w-sm">
             <div className="relative h-48 w-full">
                 <Image
                     src={thumbnail}
@@ -51,27 +53,24 @@ export default function MateriCard({
                     </div>
                 </div>
 
-                <div className="space-y-2">
-                    <div className="grid grid-cols-2 gap-2">
-                        <button
-                            onClick={onModulClick}
-                            className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
-                        >
-                            Modul
-                        </button>
-                        <button
-                            onClick={onVideoClick}
-                            className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
-                        >
-                            Video
-                        </button>
-                    </div>
-                    
+                <div className="grid grid-cols-3 gap-2">
                     <button
-                        onClick={onLatihanClick}
-                        className="w-full px-4 py-2 bg-[#F5E6E8] border-2 border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
+                        onClick={onMudahClick}
+                        className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
                     >
-                        Latihan Soal
+                        Mudah
+                    </button>
+                    <button
+                        onClick={onSedangClick}
+                        className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
+                    >
+                        Sedang
+                    </button>
+                    <button
+                        onClick={onSulitClick}
+                        className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
+                    >
+                        Sulit
                     </button>
                 </div>
             </div>

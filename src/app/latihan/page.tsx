@@ -1,42 +1,38 @@
 "use client";
 
 import Image from 'next/image';
-import MateriCard from '@/components/materiCard';
+import LatihanInfoCard from '@/components/latihanInfoCard';
 import { useRouter } from 'next/navigation';
 
-export default function Belajar() {
+export default function Latihan1() {
     const router = useRouter();
-    const materiList = [
+    
+    const latihanList = [
         {
             id: 1,
             title: "Kaidah Ejaan dan Tanda Baca Berdasarkan PUEBI",
-            thumbnail: "/materi1-thumbnail.png",
-            progress: 75,
+            thumbnail: "/frameMateri.png",
+            difficulty: 'Mudah' as const,
+            status: 'available' as const,
         },
         {
             id: 2,
             title: "Bahasa yang Tepat Berawal dari Diksi Baku",
-            thumbnail: "/materi2-thumbnail.png",
-            progress: 75,
+            thumbnail: "/frameMateri.png",
+            difficulty: 'Sedang' as const,
+            status: 'locked' as const,
         },
         {
             id: 3,
             title: "Menulis Jelas, Padat, dan Tepat dengan Kalimat Efektif",
-            thumbnail: "/materi3-thumbnail.png",
-            progress: 75,
+            thumbnail: "/frameMateri.png",
+            difficulty: 'Sulit' as const,
+            status: 'locked' as const,
         },
     ];
 
-    const handleModulClick = (materiId: number) => {
-        router.push(`/belajar/${materiId}`);
-    };
-
-    const handleVideoClick = (materiId: number) => {
-        router.push(`/belajar/${materiId}/video`);
-    };
-
-    const handleLatihanClick = (materiId: number) => {
-        router.push(`/latihan/${materiId}`);
+    const handleSoalClick = (soalId: number) => {
+        router.push(`/latihan/${soalId}`);
     };
 
     return (
@@ -75,8 +71,8 @@ export default function Belajar() {
                                 Halo, Nazwan Siddqi Muttaqin
                             </h1>
                             <p className="text-sm md:text-base text-white text-center">
-                                Berikut merupakan bagian <span className="font-bold">&quot;Aku Siap Belajar&quot;</span> agar kamu dapat 
-                                belajar lebih banyak sesuai dengan materi yang sudah kami siapkan
+                                Berikut merupakan bagian <span className="font-bold">&quot;Asah Kemampuan&quot;</span> untuk kamu dapat 
+                                melatih kemampuan kamu setelah belajar pada modul kami
                             </p>
                         </div>
                     </div>
@@ -93,16 +89,15 @@ export default function Belajar() {
             </div>
 
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-                {materiList.map((materi) => (
-                    <MateriCard
-                        key={materi.id}
-                        materiNumber={materi.id}
-                        title={materi.title}
-                        thumbnail= "/frameMateri.png"
-                        progress={materi.progress}
-                        onModulClick={() => handleModulClick(materi.id)}
-                        onVideoClick={() => handleVideoClick(materi.id)}
-                        onLatihanClick={() => handleLatihanClick(materi.id)}
+                {latihanList.map((latihan) => (
+                    <LatihanInfoCard
+                        key={latihan.id}
+                        soalNumber={latihan.id}
+                        title={latihan.title}
+                        thumbnail="/frameLatihan.png"
+                        difficulty={latihan.difficulty}
+                        status={latihan.status}
+                        onSoalClick={() => handleSoalClick(latihan.id)}
                     />
                 ))}
             </div>

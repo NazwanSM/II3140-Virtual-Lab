@@ -34,6 +34,7 @@ export default function Dashboard() {
                 imageObjectFit="contain"
                 imageAlign="right"
                 imageScale={1}
+                onClick={() => router.push('/latihan')}
             />
 
             <DashboardCard
