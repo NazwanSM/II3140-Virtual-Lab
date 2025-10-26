@@ -51,19 +51,19 @@ export default function ModulPage({ materiNumber, title, content }: ModulPagePro
 
     return (
         <div className="dashboard-page min-h-screen p-6 md:p-10 font-sans">
-            <header className="flex justify-between items-center mb-8 relative z-10">
-                <button onClick={() => router.push("/dashboard")} className="cursor-pointer">
-                    <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
+            <header className="flex justify-between items-center mb-8 relative z-50 bg-white/5 backdrop-blur-sm">
+                <button onClick={() => router.push("/dashboard")} className="cursor-pointer relative z-50">
+                    <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} priority />
                 </button>
         
-                <div className="flex items-center gap-4">
-                    <div className="bg-[#d4af3771] rounded-full px-4 py-2 flex items-center gap-2">
-                        <Image src="/bulu.png" alt="coin" width={20} height={20} />
+                <div className="flex items-center gap-4 relative z-50">
+                    <div className="bg-[#d4af3771] rounded-full px-4 py-2 flex items-center gap-2 shadow-lg">
+                        <Image src="/bulu.png" alt="coin" width={20} height={20} priority />
                         <span className="text-sm font-bold text-white">211.000</span>
                         <span className="text-xs text-white">Koin</span>
                     </div>
-                    <button className="mr-8 cursor-pointer">
-                        <Image src="/plusButton.png" alt="Tambah" width={60} height={60} />
+                    <button className="mr-8 cursor-pointer hover:scale-105 transition-transform">
+                        <Image src="/plusButton.png" alt="Tambah" width={60} height={60} priority />
                     </button>
                 </div>
             </header>
