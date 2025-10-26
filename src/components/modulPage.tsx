@@ -3,16 +3,46 @@
 import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import React from 'react';
+
+const formatText = (text: string): React.ReactNode => {
+    // Replace bold text
+    const boldPattern = /\*\*(.*?)\*\*/g;
+    const parts = text.split(boldPattern);
+    
+    // Replace -- with -->
+    const formattedParts = parts.map((part, index) => {
+        const withArrow = part.replace(/--/g, "→");
+        return index % 2 === 0 ? withArrow : <strong key={index}>{withArrow}</strong>;
+    });
+    
+    return <>{formattedParts}</>;
+};
+
+export type TableSection = {
+    type: "table";
+    title: string;
+    description?: string;
+    table: {
+        headers: string[];
+        rows: (string | React.ReactNode)[][];
+    };
+};
+
+export type PointsSection = {
+    type: "points";
+    title: string;
+    description?: string;
+    points: string[];
+};
+
+export type Section = TableSection | PointsSection;
 
 interface ModulPageProps {
     materiNumber: number;
     title: string;
     content: {
-        sections: {
-            title: string;
-            description: string;
-            points: string[];
-        }[];
+        sections: Section[];
     };
 }
 
@@ -39,14 +69,14 @@ export default function ModulPage({ materiNumber, title, content }: ModulPagePro
             </header>
 
             <div className="max-w-5xl mx-auto space-y-6">
-                <div className="bg-linear-to-r from-[#E57373] to-[#C62828] rounded-4xl border-4 border-gray-800 p-4 flex items-center gap-4 shadow-lg">
+                <div className="bg-linear-to-r from-[#E57373] to-[#C62828] rounded-4xl border-4 border-gray-800 p-4 flex items-center gap-4 shadow-lg relative z-50">
                     <button 
                         onClick={() => router.back()}
-                        className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors cursor-pointer z-10"
+                        className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors cursor-pointer"
                     >
                         <ArrowLeft size={28} strokeWidth={2.5} />
                     </button>
-                    <h1 className="text-xl md:text-2xl font-bold text-white flex-1 text-center pr-12">
+                    <h1 className="text-xl md:text-2xl font-bold text-white flex-1 text-center pr-12 relative z-50">
                         {title}
                     </h1>
                 </div>
@@ -63,14 +93,40 @@ export default function ModulPage({ materiNumber, title, content }: ModulPagePro
                                         {section.description}
                                     </p>
                                 )}
-                                {section.points.length > 0 && (
+                                {section.type === "points" && section.points.length > 0 && (
                                     <ol className="space-y-2 ml-4">
-                                        {section.points.map((point, pointIndex) => (
+                                        {section.points.map((point: string, pointIndex: number) => (
                                             <li key={pointIndex} className="text-gray-700 leading-relaxed">
-                                                {point}
+                                                {formatText(point)}
                                             </li>
                                         ))}
                                     </ol>
+                                )}
+                                {section.type === "table" && (
+                                    <div className="overflow-x-auto">
+                                        <table className="min-w-full border-2 border-gray-800">
+                                            <thead>
+                                                <tr>
+                                                    {section.table.headers.map((header, headerIndex) => (
+                                                        <th key={headerIndex} className="border-b-2 border-gray-800 bg-gray-100 px-4 py-2 text-left text-gray-900 font-bold">
+                                                            {header}
+                                                        </th>
+                                                    ))}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {section.table.rows.map((row, rowIndex) => (
+                                                    <tr key={rowIndex}>
+                                                        {row.map((cell, cellIndex) => (
+                                                            <td key={cellIndex} className="border-b border-gray-800 px-4 py-2 text-gray-900">
+                                                                {cell}
+                                                            </td>
+                                                        ))}
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 )}
                             </div>
                         ))}

@@ -1,14 +1,15 @@
 "use client";
 
-import ModulPage from '@/components/modulPage';
+import ModulPage, { type TableSection, type PointsSection } from '@/components/modulPage';
 
 export default function Materi1Modul() {
-    const materiData = {
+    const materiData: { materiNumber: number; title: string; content: { sections: (TableSection | PointsSection)[] } } = {
         materiNumber: 1,
         title: "Kaidah Ejaan dan Tanda Baca Berdasarkan PUEBI",
         content: {
             sections: [
                 {
+                    type: "points",
                     title: "I. Pemakaian Huruf",
                     description: "Mengatur cara penulisan huruf dan penggunaannya.",
                     points: [
@@ -23,6 +24,7 @@ export default function Materi1Modul() {
                     ]
                 },
                 {
+                    type: "points",
                     title: "II. Penulisan Kata",
                     description: "Menjelaskan cara menulis kata dasar, berimbuhan, ulang, gabungan, dan sebagainya.",
                     points: [
@@ -48,6 +50,7 @@ export default function Materi1Modul() {
                     ]
                 },
                 {
+                    type: "points",
                     title: "III. Pemakaian Tanda Baca",
                     description: "Menjelaskan fungsi dan penggunaan tanda baca:",
                     points: [
@@ -68,6 +71,7 @@ export default function Materi1Modul() {
                     ]
                 },
                 {
+                    type: "points",
                     title: "IV. Penulisan Unsur Serapan",
                     description: "Mengatur cara penulisan kata serapan dari bahasa asing.",
                     points: [
