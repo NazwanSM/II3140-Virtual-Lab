@@ -1,3 +1,4 @@
+![Banner Askara](\public\HeaderGithub.png)
 # 🪶 ASKARA: Virtual Lab untuk Jago TTKI  
 **Dokumen Spesifikasi Produk & Sistem Gamifikasi**
 
