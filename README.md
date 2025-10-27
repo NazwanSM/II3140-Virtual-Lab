@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <div align="center">
   <br />
     <a href="https://intrive.space" target="_blank">
@@ -14,10 +13,10 @@
     <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript" />
   </div>
 
-  <h3 align="center">Integrals & Derivatives - A Gamified Virtual Lab</h3>
+  <h3 align="center">Aksara : Virtual Lab for Tata Tulis Karya Ilmiah</h3>
 
    <div align="center">
-     Check the project on this fully responsive <a href="aksara-virtual-lab.vercel.app" target="_blank"><b>Website</b></a>. Feel free to leave a suggestion!
+     Berikut tautan project kami dapat dilihat pada <a href="aksara-virtual-lab.vercel.app" target="_blank"><b>Website</b></a>. Feel free to leave a suggestion!
     </div>
 </div>
 
