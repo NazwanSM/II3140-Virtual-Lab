@@ -1,4 +1,24 @@
-![Banner Askara](\public\HeaderGithub.png)
+<div align="center">
+  <br />
+    <a href="https://intrive.space" target="_blank">
+      <img src="./public/HeaderGithub.png" alt="Askara Banner" />
+    </a>
+  <br />
+
+  <br>
+  <div>
+    <img src="https://img.shields.io/badge/next.js-%23000000.svg?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js" />
+    <img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+    <img src="https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E" alt="JavaScript" />
+  </div>
+
+  <h3 align="center">Integrals & Derivatives - A Gamified Virtual Lab</h3>
+
+   <div align="center">
+     Check the project on this fully responsive <a href="https://integrals-and-derivatives.vercel.app" target="_blank"><b>Website</b></a>. Feel free to leave a suggestion!
+    </div>
+</div>
 # 🪶 ASKARA: Virtual Lab untuk Jago TTKI  
 **Dokumen Spesifikasi Produk & Sistem Gamifikasi**
 
