@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import AnswerFeedbackPopup from '../ui/answerFeedbackPopup';
-import PageHeader from '../ui/PageHeader';
+import PageHeader from '../ui/pageHeader';
 
 interface Profile {
     full_name: string | null;

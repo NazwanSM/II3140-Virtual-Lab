@@ -1,5 +1,5 @@
 import DashboardCard from '@/components/ui/dashboardCard';
-import PageHeader from '@/components/ui/PageHeader';
+import PageHeader from '@/components/ui/pageHeader';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';

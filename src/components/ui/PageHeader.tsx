@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import RadialMenu from './RadialMenu';
+import RadialMenu from './radialMenu';
 
 interface PageHeaderProps {
     userName?: string | null;
@@ -21,7 +21,7 @@ export default function PageHeader({
     const router = useRouter();
 
     return (
-        <header className="flex justify-between items-center mb-8 relative z-10 mx-auto">
+        <header className="flex justify-between items-center mb-8 relative z-50 mx-auto">
             <div className="flex items-center gap-4 md:gap-6">
                 <div className="shrink-0">
                     <button 

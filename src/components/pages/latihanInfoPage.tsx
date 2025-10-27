@@ -3,7 +3,7 @@
 import { ArrowLeft} from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import PageHeader from '../ui/PageHeader';
+import PageHeader from '../ui/pageHeader';
 
 interface Profile {
     full_name: string | null;

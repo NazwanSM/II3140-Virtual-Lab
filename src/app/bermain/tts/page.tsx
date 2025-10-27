@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Image from 'next/image';
 import { ArrowLeft} from 'lucide-react';
 import { useRouter } from 'next/dist/client/components/navigation';
-import RadialMenu from '@/components/ui/RadialMenu';
 
 
 const puzzleData = {
@@ -88,6 +87,7 @@ const puzzleData = {
 export default function CrosswordGame() {
     const { rows, cols, grid, numbers, answers, clues } = puzzleData;
     const router = useRouter();
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const [gridState, setGridState] = useState(
         Array(rows)
@@ -103,6 +103,42 @@ export default function CrosswordGame() {
     const [cellStatus, setCellStatus] = useState<('correct' | 'incorrect' | null)[][]>(
         Array(rows).fill(null).map(() => Array(cols).fill(null))
     );
+    const [isSoundActive, setIsSoundActive] = useState(true);
+
+    useEffect(() => {
+        audioRef.current = new Audio('/sound/background-music.mp3');
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.5;
+
+        if (isSoundActive) {
+            audioRef.current.play().catch(err => {
+                console.log('Autoplay prevented:', err);
+            });
+        }
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (audioRef.current) {
+            if (isSoundActive) {
+                audioRef.current.play().catch(err => {
+                    console.log('Play prevented:', err);
+                });
+            } else {
+                audioRef.current.pause();
+            }
+        }
+    }, [isSoundActive]);
+
+    const toggleSound = () => {
+        setIsSoundActive(!isSoundActive);
+    };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         const { row, col } = activeCell;
@@ -273,6 +309,8 @@ export default function CrosswordGame() {
 
         if (allCorrect) {
             setMessage('Selamat! Semua jawaban benar!');
+            audioRef.current = new Audio('/sound/success-sound.mp3');
+            audioRef.current.play();
         } else {
             setMessage('Masih ada jawaban yang salah. Coba lagi!');
         }
@@ -343,7 +381,17 @@ export default function CrosswordGame() {
                         <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
                     </button>
                 </div>
-                <RadialMenu />
+                <button 
+                    onClick={toggleSound}
+                    className="cursor-pointer hover:scale-105 transition-all duration-300"
+                >
+                    <Image 
+                        src={isSoundActive ? "/button-sound-active.png" : "/button-sound-mute.png"} 
+                        alt={isSoundActive ? "Sound Active" : "Sound Mute"} 
+                        width={56} 
+                        height={56} 
+                    />
+                </button>
             </header>
 
             <div className="max-w-7xl mx-auto mb-4">

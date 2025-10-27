@@ -25,18 +25,15 @@ export default function RadialMenu({ className = '' }: RadialMenuProps) {
     ];
 
     return (
-        <div className={`shrink-0 relative ${className}`}>
-            {/* Backdrop overlay */}
+        <div className={`shrink-0 relative ${className} z-50`}>
             {isMenuOpen && (
                 <div 
-                    className="fixed inset-0 z-40 transition-opacity duration-300"
+                    className="fixed inset-0 z-50 transition-opacity duration-300"
                     onClick={() => setIsMenuOpen(false)}
                 />
             )}
 
-            {/* Radial Menu Items */}
             {menuItems.map((item, index) => {
-                // Arc fan shape - bottom left quadrant
                 const startAngle = 90; 
                 const endAngle = 180;
                 const angleRange = endAngle - startAngle;
@@ -70,7 +67,6 @@ export default function RadialMenu({ className = '' }: RadialMenuProps) {
                 );
             })}
             
-            {/* Main Plus Button */}
             <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className={`cursor-pointer hover:scale-105 transition-all duration-300 relative z-50 ${

@@ -4,7 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import RadialMenu from '../ui/RadialMenu';
+import RadialMenu from '../ui/radialMenu';
 
 interface Profile {
     full_name: string | null;
@@ -155,7 +155,7 @@ export default function ProfilePage({
 
                             <div className="bg-[#d4af378a] rounded-full px-6 py-2 inline-flex items-center gap-2 shadow-md">
                                 <Image src="/bulu.png" alt="tinta" width={24} height={24} />
-                                <span className="text-lg font-bold text-white">{profile.tinta} Tinta</span>
+                                <span className="text-lg md:text-sm sm:text-xs font-bold text-white">{profile.tinta} Tinta</span>
                             </div>
 
                             <p className="text-gray-600 text-sm">

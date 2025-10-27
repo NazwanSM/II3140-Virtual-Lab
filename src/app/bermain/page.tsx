@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { redirect} from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import GameCard from '@/components/ui/gameCard';
-import PageHeader from '@/components/ui/PageHeader';
+import PageHeader from '@/components/ui/pageHeader';
 
 interface Profile {
     full_name: string | null;

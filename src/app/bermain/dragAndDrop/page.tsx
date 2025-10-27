@@ -1,10 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import RadialMenu from '@/components/ui/RadialMenu';
 
 const allGameData = [
     {
@@ -62,6 +61,7 @@ const allGameData = [
 
 export default function DragAndDropGame() {
     const router = useRouter();
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [answers, setAnswers] = useState<{ [key: number]: string }>({});
@@ -70,6 +70,42 @@ export default function DragAndDropGame() {
     const [checked, setChecked] = useState(false);
     const [results, setResults] = useState<{ [key: number]: boolean }>({});
     const [message, setMessage] = useState('');
+    const [isSoundActive, setIsSoundActive] = useState(true);
+
+    useEffect(() => {
+        audioRef.current = new Audio('/sound/background-music.mp3');
+        audioRef.current.loop = true;
+        audioRef.current.volume = 0.5;
+
+        if (isSoundActive) {
+            audioRef.current.play().catch(err => {
+                console.log('Autoplay prevented:', err);
+            });
+        }
+
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
+        };
+    }, []);
+
+    useEffect(() => {
+        if (audioRef.current) {
+            if (isSoundActive) {
+                audioRef.current.play().catch(err => {
+                    console.log('Play prevented:', err);
+                });
+            } else {
+                audioRef.current.pause();
+            }
+        }
+    }, [isSoundActive]);
+
+    const toggleSound = () => {
+        setIsSoundActive(!isSoundActive);
+    };
 
     const gameData = allGameData[currentQuestionIndex];
 
@@ -213,7 +249,17 @@ export default function DragAndDropGame() {
                         <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
                     </button>
                 </div>
-                <RadialMenu />
+                <button 
+                    onClick={toggleSound}
+                    className="cursor-pointer hover:scale-105 transition-all duration-300"
+                >
+                    <Image 
+                        src={isSoundActive ? "/button-sound-active.png" : "/button-sound-mute.png"} 
+                        alt={isSoundActive ? "Sound Active" : "Sound Mute"} 
+                        width={56} 
+                        height={56} 
+                    />
+                </button>
             </header>
 
             <div className="max-w-7xl mx-auto mb-4">
