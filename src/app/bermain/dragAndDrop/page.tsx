@@ -359,7 +359,7 @@ export default function DragAndDropGame() {
                                 }}
                                 className="transition-all hover:scale-105 cursor-pointer flex items-center justify-center z-10"
                             >
-                                {currentQuestionIndex < allGameData.length - 1 ? <Image src="/button-selanjutnya.png" alt="Selanjutnya" width={180} height={180} /> : <Image src="/button-finish.png" alt="Selesai" width={180} height={180} />}
+                                {currentQuestionIndex < allGameData.length - 1 ? <Image src="/button-selanjutnya.png" alt="Selanjutnya" width={180} height={180} /> : <Image src="/button-selesai.png" alt="Selesai" width={180} height={180} />}
                             </button>
                         )}
                     </div>
