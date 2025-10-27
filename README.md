@@ -17,20 +17,9 @@
   <h3 align="center">Integrals & Derivatives - A Gamified Virtual Lab</h3>
 
    <div align="center">
-     Check the project on this fully responsive <a href="https://integrals-and-derivatives.vercel.app" target="_blank"><b>Website</b></a>. Feel free to leave a suggestion!
+     Check the project on this fully responsive <a href="aksara-virtual-lab.vercel.app" target="_blank"><b>Website</b></a>. Feel free to leave a suggestion!
     </div>
 </div>
-=======
-<<<<<<< HEAD
-# 🪶 Aksara: Virtual Lab untuk Jago TTKI  
-=======
-![Banner Askara](\public\HeaderGithub.png)
->>>>>>> 097953821f2378e4ac7e4a9e55e34b5f587f14a2
-# 🪶 ASKARA: Virtual Lab untuk Jago TTKI  
->>>>>>> 18fccf0c80ec0eab924afe6c4bc7ddeaf7a27b10
-**Dokumen Spesifikasi Produk & Sistem Gamifikasi**
-
----
 
 ## Table of Contents
 1. [🪶 Pendahuluan](#-pendahuluan)
