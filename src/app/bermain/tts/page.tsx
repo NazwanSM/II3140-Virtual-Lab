@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { ArrowLeft, Link } from 'lucide-react';
-import { title } from 'process';
+import { ArrowLeft} from 'lucide-react';
 import { useRouter } from 'next/dist/client/components/navigation';
+import RadialMenu from '@/components/ui/RadialMenu';
 
 
 const puzzleData = {
@@ -337,17 +337,13 @@ export default function CrosswordGame() {
 
     return (
         <div className="dashboard-page p-6 md:p-10 font-sans" >
-            <header className="flex justify-between items-center mb-8 relative z-10 mx-auto">
+            <header className="flex justify-between items-center mb-8 relative z-50 mx-auto">
                 <div className="flex items-center gap-4 md:gap-6">
                     <button onClick={() => router.push("/dashboard")} className="cursor-pointer hover:opacity-90 transition-opacity">
                         <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
                     </button>
                 </div>
-                <div className="shrink-0">
-                    <button className="cursor-pointer hover:scale-105 transition-transform">
-                        <Image src="/plusButton.png" alt="Tambah" width={56} height={56} />
-                    </button>
-                </div>
+                <RadialMenu />
             </header>
 
             <div className="max-w-7xl mx-auto mb-4">
@@ -487,4 +483,3 @@ export default function CrosswordGame() {
         </div>
     );
 }
-
