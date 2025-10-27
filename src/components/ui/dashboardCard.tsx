@@ -1,4 +1,3 @@
-import { Medal, Star } from 'lucide-react';
 import Image from 'next/image';
 
 interface DashboardCardProps {
@@ -24,7 +23,6 @@ export default function DashboardCard({
     bgColor,
     textColor,
     progress,
-    level,
     description,
     image,
     imageSize = 'full',

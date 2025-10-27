@@ -72,7 +72,7 @@ export default function MateriCard({
                     </div>
                     
                     <Link
-                        href={`/latihan/${materiNumber}`}
+                        href={`/latihan`}
                         className="block w-full px-4 py-2 bg-[#F5E6E8] border-2 border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-all duration-200 cursor-pointer text-center hover:scale-103"
                     >
                         Latihan Soal

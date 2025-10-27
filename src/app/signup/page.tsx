@@ -81,7 +81,7 @@ export default function Signup() {
                             htmlFor="nama"
                             className="block text-sm font-medium text-gray-700 mb-1"
                         >
-                            Nama Lengkap *
+                            Username *
                         </label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -89,13 +89,13 @@ export default function Signup() {
                             </span>
                             <input
                                 type="text"
-                                id="nama"
-                                name="nama"
+                                id="username"
+                                name="username"
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
                                 required
                                 className="block w-full rounded-lg border-gray-300 bg-pink-50 p-3 pl-10 text-black placeholder-gray-500 focus:border-black focus:ring-black"
-                                placeholder="Nama Lengkap"
+                                placeholder="Username"
                             />
                         </div>
                     </div>
