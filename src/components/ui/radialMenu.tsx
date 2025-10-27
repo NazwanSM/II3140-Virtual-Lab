@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { signOut } from '@/lib/actions/auth';
 
 interface MenuItem {
     label: string;
@@ -21,7 +22,7 @@ export default function RadialMenu({ className = '' }: RadialMenuProps) {
     const menuItems: MenuItem[] = [
         { label: 'Profile', icon: '/profile.png', action: () => router.push('/profile') },
         { label: 'Home', icon: '/home.png', action: () => router.push('/dashboard') },
-        { label: 'Logout', icon: '/logout.png', action: () => router.push('/login') },
+        { label: 'Logout', icon: '/logout.png', action: () => signOut() },
     ];
 
     return (
