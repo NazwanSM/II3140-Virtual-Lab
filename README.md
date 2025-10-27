@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🪶 ASKARA: Virtual Lab untuk Jago TTKI  
+**Dokumen Spesifikasi Produk & Sistem Gamifikasi**
 
-## Getting Started
+---
 
-First, run the development server:
+## Table of Contents
+1. [🪶 Pendahuluan](#-pendahuluan)
+2. [🧩 Fitur Utama](#-fitur-utama)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🪶 Pendahuluan
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Askara** adalah platform *Virtual Lab* interaktif yang dirancang untuk membantu pelajar menguasai keterampilan **Tata Tulis Karya Ilmiah (TTKI)** berbasis kaidah **KBBI** dan **PUEBI**.  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Melalui konsep **belajar ➜ praktik ➜ refleksi ➜ gamifikasi**, pengguna tidak hanya memahami teori, tetapi juga *terlibat aktif* dalam simulasi dan permainan bahasa yang menyenangkan.
 
-## Learn More
+Filosofi nama *“Askara”* berarti **cahaya, aksara, atau huruf pencerah**, yang menggambarkan misi platform ini untuk mencerahkan kemampuan literasi ilmiah pengguna.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧩 Fitur Utama
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 1. Belajar  
+Pengguna dapat mempelajari materi sesuai dengan modul yang telah disiapkan.  
+Tersedia **3 modul utama**, yaitu:
+- **Kaidah Ejaan dan Tanda Baca (PUEBI)**  
+- **Bahasa yang Tepat Berawal dari Diksi Baku (KBBI)**  
+- **Menulis Jelas, Padat, dan Tepat dengan Kalimat Efektif**  
 
-## Deploy on Vercel
+Selain materi ajar berbasis teks interaktif, pengguna juga dapat menonton **video pembelajaran** untuk memperdalam pemahaman.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 2. Latihan  
+Setiap modul dilengkapi dengan **latihan soal** berbasis tiga tingkatan kesulitan:
+- Mudah  
+- Sedang  
+- Sulit  
+
+Soal mencakup **pilihan ganda, esai, dan drag & drop**.  
+Pengguna memperoleh **Tinta** dari setiap latihan, yang digunakan untuk membuka level berikutnya dan karakter baru dalam sistem gamifikasi Askara.
+
+---
+
+### 3. Main  
+Fitur bermain dirancang agar pengguna dapat *belajar sambil bermain*.  
+Terdapat dua permainan utama:  
+- **Teka-Teki Silang (TTS):** menguji pemahaman istilah dan konsep kebahasaan.  
+- **Drag and Drop:** menyusun kalimat atau memilih kata baku secara interaktif.  
+
+Kedua permainan diadaptasi dari materi pada setiap modul, dan hanya bisa diakses setelah pengguna mencapai level tertentu.  
+
+---
+
+> 🌟 *Askara mengubah proses belajar kebahasaan menjadi pengalaman yang hidup, menyenangkan, dan bermakna.*  
+> “Dari aksara, lahir cahaya pengetahuan.” ✨
