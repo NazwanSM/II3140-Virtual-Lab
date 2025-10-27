@@ -1,59 +1,87 @@
-"use client";
-
 import Image from 'next/image';
-import MateriCard from '@/components/materiCard';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import MateriCard from '@/components/ui/materiCard';
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
 
-export default function Belajar() {
-    const router = useRouter();
-    const materiList = [
-        {
-            id: 1,
-            title: "Kaidah Ejaan dan Tanda Baca Berdasarkan PUEBI",
-            thumbnail: "/materi1-thumbnail.png",
-            progress: 75,
-        },
-        {
-            id: 2,
-            title: "Bahasa yang Tepat Berawal dari Diksi Baku",
-            thumbnail: "/materi2-thumbnail.png",
-            progress: 75,
-        },
-        {
-            id: 3,
-            title: "Menulis Jelas, Padat, dan Tepat dengan Kalimat Efektif",
-            thumbnail: "/materi3-thumbnail.png",
-            progress: 75,
-        },
-    ];
+interface Profile {
+    full_name: string | null;
+    tinta: number;
+}
 
-    const handleModulClick = (materiId: number) => {
-        router.push(`/belajar/${materiId}`);
-    };
+interface Module {
+    id: string;
+    module_number : number;
+    title: string;
+    description: string;
+    thumbnail_url: string | null;
+}
 
-    const handleVideoClick = (materiId: number) => {
-        router.push(`/belajar/${materiId}/video`);
-    };
+interface LearningProgress {
+    module_id: string;
+    progress: number;
+    completed: boolean;
+}
 
-    const handleLatihanClick = (materiId: number) => {
-        router.push(`/latihan/${materiId}`);
-    };
+export default async function Belajar() {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        redirect('/login');
+    }
+
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('full_name, tinta')
+        .eq('id', user.id)
+        .single() as { data: Profile | null };
+
+    const { data: modules } = await supabase
+        .from('modules')
+        .select('*')
+        .order('module_number', { ascending: true }) as { data: Module[] | null };
+
+    const { data: progressData } = await supabase
+        .from('learning_progress')
+        .select('module_id, progress, completed')
+        .eq('user_id', user.id) as { data: LearningProgress[] | null };
+
+    const modulesWithProgress = modules?.map((module) => {
+        const progressRecord = progressData?.find((p) => p.module_id === module.id);
+        return {
+            id: module.id,
+            materiNumber: module.module_number,
+            title: module.title,
+            description: module.description,
+            thumbnail: module.thumbnail_url || "/frameMateri.png",
+            progress: progressRecord?.progress || 0,
+        };
+    }) || [];
 
     return (
-        <div className="dashboard-page min-h-screen p-6 md:p-10 font-sans">
-            <header className="flex justify-between items-center mb-8 relative z-10">
-                <button onClick={() => router.push("/dashboard")} className="cursor-pointer">
-                    <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
-                </button>
-
-                <div className="flex items-center gap-4">
-                    <div className="bg-[#d4af3771] rounded-full px-4 py-2 flex items-center gap-2">
-                        <Image src="/bulu.png" alt="coin" width={20} height={20} />
-                        <span className="text-sm font-bold text-white">211.000</span>
-                        <span className="text-xs text-white">Koin</span>
+        <div className="dashboard-page p-6 md:p-10 font-sans" >
+            <header className="flex justify-between items-center mb-8 relative z-10 mx-auto">
+                <div className="flex items-center gap-4 md:gap-6">
+                    <Link href="/dashboard" className="cursor-pointer hover:opacity-90 transition-opacity">
+                        <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
+                    </Link>
+                    <div className="text-left">
+                        <p className="text-base md:text-lg">
+                            <span className="text-gray-600">Halo, </span>
+                            <Link href="/profile" className="font-bold text-gray-900 hover:underline">
+                                {profile?.full_name || 'Aksara Learner'}
+                            </Link>
+                        </p>
+                        <div className="bg-[#d4af378a] rounded-full px-4 py-0 flex items-center gap-2 shadow-md">
+                            <Image src="/bulu.png" alt="tinta" width={20} height={20} />
+                            <span className="text-sm font-bold text-white">{profile?.tinta || 0} tinta</span>
+                        </div>
                     </div>
-                    <button className="mr-8 cursor-pointer">
-                        <Image src="/plusButton.png" alt="Tambah" width={60} height={60} />
+                </div>
+                <div className="shrink-0">
+                    <button className="cursor-pointer hover:scale-105 transition-transform">
+                        <Image src="/plusButton.png" alt="Tambah" width={56} height={56} />
                     </button>
                 </div>
             </header>
@@ -72,7 +100,7 @@ export default function Belajar() {
                         </div>
                         <div>
                             <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2 text-center">
-                                Halo, Nazwan Siddqi Muttaqin
+                                Halo, {profile?.full_name || 'Aksara Learner'}
                             </h1>
                             <p className="text-sm md:text-base text-white text-center">
                                 Berikut merupakan bagian <span className="font-bold">&quot;Aku Siap Belajar&quot;</span> agar kamu dapat 
@@ -93,16 +121,14 @@ export default function Belajar() {
             </div>
 
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-                {materiList.map((materi) => (
+                {modulesWithProgress.map((materi) => (
                     <MateriCard
                         key={materi.id}
-                        materiNumber={materi.id}
+                        materiId={materi.id}
+                        materiNumber={materi.materiNumber}
                         title={materi.title}
-                        thumbnail= "/frameMateri.png"
+                        thumbnail="/frameMateri.png"
                         progress={materi.progress}
-                        onModulClick={() => handleModulClick(materi.id)}
-                        onVideoClick={() => handleVideoClick(materi.id)}
-                        onLatihanClick={() => handleLatihanClick(materi.id)}
                     />
                 ))}
             </div>

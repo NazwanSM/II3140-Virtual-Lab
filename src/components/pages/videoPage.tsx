@@ -2,33 +2,47 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft} from 'lucide-react';
+
+interface Profile {
+    full_name: string | null;
+    tinta: number;
+}
 
 interface VideoPageProps {
-    materiNumber: number;
+    materiId: string;
     title: string;
     videoUrl: string;
     videoTitle: string;
+    profile?: Profile;
 }
 
-export default function VideoPage({ materiNumber, title, videoUrl, videoTitle }: VideoPageProps) {
+export default function VideoPage({ materiId, title, videoUrl, videoTitle, profile }: VideoPageProps) {
     const router = useRouter();
 
     return (
-        <div className="dashboard-page min-h-screen p-6 md:p-10 font-sans">
-            <header className="flex justify-between items-center mb-8 relative z-10">
-                <button onClick={() => router.push("/dashboard")} className="cursor-pointer">
-                    <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
-                </button>   
-        
-                <div className="flex items-center gap-4">
-                    <div className="bg-[#d4af3771] rounded-full px-4 py-2 flex items-center gap-2">
-                        <Image src="/bulu.png" alt="coin" width={20} height={20} />
-                        <span className="text-sm font-bold text-white">211.000</span>
-                        <span className="text-xs text-white">Koin</span>
+        <div className="dashboard-page p-6 md:p-10 font-sans" >
+            <header className="flex justify-between items-center mb-8 relative z-10 mx-auto">
+                <div className="flex items-center gap-4 md:gap-6">
+                    <button onClick={() => router.push("/dashboard")} className="cursor-pointer hover:opacity-90 transition-opacity">
+                        <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
+                    </button>
+                    <div className="text-left">
+                        <p className="text-base md:text-lg">
+                            <span className="text-gray-600">Halo, </span>
+                            <button onClick={() => router.push("/profile")} className="font-bold text-gray-900 hover:underline cursor-pointer">
+                                {profile?.full_name || 'Aksara Learner'}
+                            </button>
+                        </p>
+                        <div className="bg-[#d4af378a] rounded-full px-4 py-0 flex items-center gap-2 shadow-md">
+                            <Image src="/bulu.png" alt="tinta" width={20} height={20} />
+                            <span className="text-sm font-bold text-white">{profile?.tinta || 0} tinta</span>
+                        </div>
                     </div>
-                    <button className="mr-8 cursor-pointer">
-                        <Image src="/plusButton.png" alt="Tambah" width={60} height={60} />
+                </div>
+                <div className="shrink-0">
+                    <button className="cursor-pointer hover:scale-105 transition-transform">
+                        <Image src="/plusButton.png" alt="Tambah" width={56} height={56} />
                     </button>
                 </div>
             </header>
@@ -72,7 +86,7 @@ export default function VideoPage({ materiNumber, title, videoUrl, videoTitle }:
 
                 <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 relative z-20">
                     <button 
-                        onClick={() => router.push(`/belajar/${materiNumber}`)}
+                        onClick={() => router.push(`/modul/${materiId}`)}
                         className="transition-all hover:scale-105 cursor-pointer"
                     >
                         <Image src="/button-materi.png" alt="Materi" width={180} height={180} className="inline-block mr-2" />

@@ -1,16 +1,20 @@
 "use client";
 
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft} from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
+
+interface Profile {
+    full_name: string | null;
+    tinta: number;
+}
+
 const formatText = (text: string): React.ReactNode => {
-    // Replace bold text
     const boldPattern = /\*\*(.*?)\*\*/g;
     const parts = text.split(boldPattern);
     
-    // Replace -- with -->
     const formattedParts = parts.map((part, index) => {
         const withArrow = part.replace(/--/g, "→");
         return index % 2 === 0 ? withArrow : <strong key={index}>{withArrow}</strong>;
@@ -39,31 +43,50 @@ export type PointsSection = {
 export type Section = TableSection | PointsSection;
 
 interface ModulPageProps {
+    materiId: number;
     materiNumber: number;
     title: string;
     content: {
         sections: Section[];
     };
+    profile?: Profile;
 }
 
-export default function ModulPage({ materiNumber, title, content }: ModulPageProps) {
+export default function ModulPage({ materiId, materiNumber, title, content, profile }: ModulPageProps) {
     const router = useRouter();
 
+    const handleDownload = () => {
+        const link = document.createElement('a');
+        link.href = `/modul/Modul-${materiNumber}.pdf`;
+        link.download = `Modul-${materiNumber}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
-        <div className="dashboard-page min-h-screen p-6 md:p-10 font-sans">
-            <header className="flex justify-between items-center mb-8 relative z-50 bg-white/5 backdrop-blur-sm">
-                <button onClick={() => router.push("/dashboard")} className="cursor-pointer relative z-50">
-                    <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} priority />
-                </button>
-        
-                <div className="flex items-center gap-4 relative z-50">
-                    <div className="bg-[#d4af3771] rounded-full px-4 py-2 flex items-center gap-2 shadow-lg">
-                        <Image src="/bulu.png" alt="coin" width={20} height={20} priority />
-                        <span className="text-sm font-bold text-white">211.000</span>
-                        <span className="text-xs text-white">Koin</span>
+        <div className="dashboard-page p-6 md:p-10 font-sans" >
+            <header className="flex justify-between items-center mb-8 relative z-10 mx-auto">
+                <div className="flex items-center gap-4 md:gap-6">
+                    <button onClick={() => router.push("/dashboard")} className="cursor-pointer hover:opacity-90 transition-opacity">
+                        <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
+                    </button>
+                    <div className="text-left">
+                        <p className="text-base md:text-lg">
+                            <span className="text-gray-600">Halo, </span>
+                            <button onClick={() => router.push("/profile")} className="font-bold text-gray-900 hover:underline cursor-pointer">
+                                {profile?.full_name || 'Aksara Learner'}
+                            </button>
+                        </p>
+                        <div className="bg-[#d4af378a] rounded-full px-4 py-0 flex items-center gap-2 shadow-md">
+                            <Image src="/bulu.png" alt="tinta" width={20} height={20} />
+                            <span className="text-sm font-bold text-white">{profile?.tinta || 0} tinta</span>
+                        </div>
                     </div>
-                    <button className="mr-8 cursor-pointer hover:scale-105 transition-transform">
-                        <Image src="/plusButton.png" alt="Tambah" width={60} height={60} priority />
+                </div>
+                <div className="shrink-0">
+                    <button className="cursor-pointer hover:scale-105 transition-transform">
+                        <Image src="/plusButton.png" alt="Tambah" width={56} height={56} />
                     </button>
                 </div>
             </header>
@@ -108,7 +131,7 @@ export default function ModulPage({ materiNumber, title, content }: ModulPagePro
                                             <thead>
                                                 <tr>
                                                     {section.table.headers.map((header, headerIndex) => (
-                                                        <th key={headerIndex} className="border-b-2 border-gray-800 bg-gray-100 px-4 py-2 text-left text-gray-900 font-bold">
+                                                        <th key={headerIndex} className="border-b-2 border-gray-800 bg-gray-100 px-4 py-2 text-center text-gray-900 font-bold">
                                                             {header}
                                                         </th>
                                                     ))}
@@ -118,7 +141,7 @@ export default function ModulPage({ materiNumber, title, content }: ModulPagePro
                                                 {section.table.rows.map((row, rowIndex) => (
                                                     <tr key={rowIndex}>
                                                         {row.map((cell, cellIndex) => (
-                                                            <td key={cellIndex} className="border-b border-gray-800 px-4 py-2 text-gray-900">
+                                                            <td key={cellIndex} className="border-b border-gray-800 px-4 py-2 text-gray-900 text-center">
                                                                 {cell}
                                                             </td>
                                                         ))}
@@ -136,20 +159,20 @@ export default function ModulPage({ materiNumber, title, content }: ModulPagePro
                 <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 relative z-20">
                     <div className="flex flex-col sm:flex-row gap-3">
                         <button 
-                            onClick={() => router.back()}
+                            onClick={handleDownload}
                             className="transition-all hover:scale-105 cursor-pointer"
                         >
                             <Image src="/button-unduh.png" alt="Unduh" width={180} height={180} className="inline-block mr-2" />
                         </button>
                         <button 
-                            onClick={() => router.push(`/belajar/${materiNumber}/latihan`)}
+                            onClick={() => router.push(`/modul/${materiId}/latihan`)}
                             className="transition-all hover:scale-105 cursor-pointer"
                         >
                             <Image src="/button-latihan.png" alt="Latihan" width={180} height={180} className="inline-block mr-2" />
                         </button>
                     </div>
                     <button 
-                        onClick={() => router.push(`/belajar/${materiNumber}/video`)}
+                        onClick={() => router.push(`/video/${materiId}`)}
                         className="transition-all hover:scale-105 cursor-pointer flex items-center justify-center gap-2"
                     >
                         <Image src="/button-video.png" alt="Video" width={180} height={180} className="inline-block mr-2" />

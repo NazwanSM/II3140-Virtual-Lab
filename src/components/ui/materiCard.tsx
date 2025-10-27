@@ -1,23 +1,23 @@
+'use client';
+
 import Image from 'next/image';
+import Link from 'next/link';
+import ProgressLink from '../shared/progressLink';
 
 interface MateriCardProps {
+    materiId: string;
     materiNumber: number;
     title: string;
     thumbnail: string;
     progress: number;
-    onModulClick?: () => void;
-    onVideoClick?: () => void;
-    onLatihanClick?: () => void;
 }
 
 export default function MateriCard({
+    materiId,
     materiNumber,
     title,
     thumbnail,
     progress,
-    onModulClick,
-    onVideoClick,
-    onLatihanClick,
 }: MateriCardProps) {
     return (
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl duration-300 w-full max-w-sm transition-all hover:scale-105">
@@ -53,26 +53,30 @@ export default function MateriCard({
 
                 <div className="space-y-2">
                     <div className="grid grid-cols-2 gap-2">
-                        <button
-                            onClick={onModulClick}
-                            className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
+                        <ProgressLink
+                            href={`/modul/${materiId}`}
+                            moduleId={materiId}
+                            progressType="modul"
+                            className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-all duration-200 cursor-pointer text-center hover:scale-103"
                         >
                             Modul
-                        </button>
-                        <button
-                            onClick={onVideoClick}
-                            className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
+                        </ProgressLink>
+                        <ProgressLink
+                            href={`/video/${materiId}`}
+                            moduleId={materiId}
+                            progressType="video"
+                            className="px-4 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-all duration-200 cursor-pointer text-center hover:scale-103"
                         >
                             Video
-                        </button>
+                        </ProgressLink>
                     </div>
                     
-                    <button
-                        onClick={onLatihanClick}
-                        className="w-full px-4 py-2 bg-[#F5E6E8] border-2 border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer"
+                    <Link
+                        href={`/latihan/${materiNumber}`}
+                        className="block w-full px-4 py-2 bg-[#F5E6E8] border-2 border-[#D4A5B0] rounded-lg text-sm font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-all duration-200 cursor-pointer text-center hover:scale-103"
                     >
                         Latihan Soal
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>

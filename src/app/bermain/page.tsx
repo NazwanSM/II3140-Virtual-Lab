@@ -3,25 +3,14 @@ import LatihanInfoCard from '@/components/ui/latihanCard';
 import { redirect} from 'next/navigation';
 import Link from 'next/dist/client/link';
 import { createClient } from '@/lib/supabase/server';
+import GameCard from '@/components/ui/GameCard';
 
 interface Profile {
     full_name: string | null;
     tinta: number;
 }
 
-interface Module {
-    id: string;
-    module_number: number;
-    title: string;
-}
-
-interface QuizResult {
-    module_id: string;
-    difficulty: string;
-    score: number;
-}
-
-export default async function Latihan() {
+export default async function Bermain() {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -34,53 +23,6 @@ export default async function Latihan() {
         .select('full_name, tinta')
         .eq('id', user.id)
         .single() as { data: Profile | null };
-
-    const { data: modules } = await supabase
-        .from('modules')
-        .select('id, module_number, title')
-        .order('module_number') as { data: Module[] | null };
-
-    const { data: quizResults } = await supabase
-        .from('quiz_results')
-        .select('module_id, difficulty, score')
-        .eq('user_id', user.id) as { data: QuizResult[] | null };
-
-    const scoreMap = new Map<string, number>();
-    quizResults?.forEach((result) => {
-        const key = `${result.module_id}-${result.difficulty}`;
-        scoreMap.set(key, result.score);
-    });
-
-    const latihanList = modules?.flatMap((module) => [
-        {
-            id: module.id,
-            moduleNumber: module.module_number,
-            title: module.title,
-            thumbnail: "/frameMateri.png",
-            difficulty: 'Mudah' as const,
-            status: 'available' as const,
-            lastScore: scoreMap.get(`${module.id}-mudah`) || null,
-        },
-        {
-            id: module.id,
-            moduleNumber: module.module_number,
-            title: module.title,
-            thumbnail: "/frameMateri.png",
-            difficulty: 'Sedang' as const,
-            status: 'available' as const,
-            lastScore: scoreMap.get(`${module.id}-sedang`) || null,
-        },
-        {
-            id: module.id,
-            moduleNumber: module.module_number,
-            title: module.title,
-            thumbnail: "/frameMateri.png",
-            difficulty: 'Sulit' as const,
-            status: 'available' as const,
-            lastScore: scoreMap.get(`${module.id}-sulit`) || null,
-        },
-    ]) || [];
-
     
 
     return (
@@ -115,10 +57,10 @@ export default async function Latihan() {
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="shrink-0">
                             <Image 
-                                src="/book4.png" 
+                                src="/brick.png" 
                                 alt="Books" 
-                                width={120} 
-                                height={120}
+                                width={130} 
+                                height={130}
                                 className="drop-shadow-lg w-20 h-20 md:w-32 md:h-32"
                             />
                         </div>
@@ -127,36 +69,33 @@ export default async function Latihan() {
                                 Halo, {profile?.full_name || 'Aksara Learner'}
                             </h1>
                             <p className="text-sm md:text-base text-white text-center">
-                                Berikut merupakan bagian <span className="font-bold">&quot;Asah Kemampuan&quot;</span> untuk kamu dapat 
-                                melatih kemampuan kamu setelah belajar pada modul kami
+                                Ga hanya berlatih, tapi kamu bisa <span className="font-bold">&quot;Bermain&quot;</span> untuk meningkatkan kemampuan kamu di sini!
                             </p>
                         </div>
                     </div>
                     <div className="shrink-0 hidden lg:block">
                         <Image 
-                            src="/book5.png" 
+                            src="/medal2.png" 
                             alt="Notebook" 
-                            width={120} 
-                            height={120}
+                            width={100} 
+                            height={10}
                             className="drop-shadow-lg"
                         />
                     </div>
                 </div>
             </div>
 
-            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-                {latihanList.map((latihan) => (
-                    <LatihanInfoCard
-                        key={`${latihan.id}-${latihan.difficulty}`}
-                        moduleId={latihan.id}
-                        moduleNumber={latihan.moduleNumber}
-                        title={latihan.title}
-                        thumbnail="/frameLatihan.png"
-                        difficulty={latihan.difficulty}
-                        status={latihan.status}
-                        lastScore={latihan.lastScore}
-                    />
-                ))}
+            <div className="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 relative z-10">
+                <GameCard
+                    title="Teka - Teki Silang"
+                    imageSrc="/tts.png"
+                    href="/bermain"
+                />
+                <GameCard
+                    title="Drag and Drop"
+                    imageSrc="/dad.png"
+                    href="/bermain"
+                />
             </div>
         </div>
     );
