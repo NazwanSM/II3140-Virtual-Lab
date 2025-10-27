@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # 🪶 Aksara: Virtual Lab untuk Jago TTKI  
+=======
+![Banner Askara](\public\HeaderGithub.png)
+# 🪶 ASKARA: Virtual Lab untuk Jago TTKI  
+>>>>>>> 18fccf0c80ec0eab924afe6c4bc7ddeaf7a27b10
 **Dokumen Spesifikasi Produk & Sistem Gamifikasi**
 
 ---
