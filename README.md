@@ -1,4 +1,4 @@
-# 🪶 ASKARA: Virtual Lab untuk Jago TTKI  
+# 🪶 Aksara: Virtual Lab untuk Jago TTKI  
 **Dokumen Spesifikasi Produk & Sistem Gamifikasi**
 
 ---
@@ -11,11 +11,11 @@
 
 ## 🪶 Pendahuluan
 
-**Askara** adalah platform *Virtual Lab* interaktif yang dirancang untuk membantu pelajar menguasai keterampilan **Tata Tulis Karya Ilmiah (TTKI)** berbasis kaidah **KBBI** dan **PUEBI**.  
+**Aksara** adalah platform *Virtual Lab* interaktif yang dirancang untuk membantu pelajar menguasai keterampilan **Tata Tulis Karya Ilmiah (TTKI)** berbasis kaidah **KBBI** dan **PUEBI**.  
 
 Melalui konsep **belajar ➜ praktik ➜ refleksi ➜ gamifikasi**, pengguna tidak hanya memahami teori, tetapi juga *terlibat aktif* dalam simulasi dan permainan bahasa yang menyenangkan.
 
-Filosofi nama *“Askara”* berarti **cahaya, aksara, atau huruf pencerah**, yang menggambarkan misi platform ini untuk mencerahkan kemampuan literasi ilmiah pengguna.
+Filosofi nama *“Aksara”* berarti **cahaya, aksara, atau huruf pencerah**, yang menggambarkan misi platform ini untuk mencerahkan kemampuan literasi ilmiah pengguna.
 
 ---
 
@@ -39,7 +39,7 @@ Setiap modul dilengkapi dengan **latihan soal** berbasis tiga tingkatan kesulita
 - Sulit  
 
 Soal mencakup **pilihan ganda, esai, dan drag & drop**.  
-Pengguna memperoleh **Tinta** dari setiap latihan, yang digunakan untuk membuka level berikutnya dan karakter baru dalam sistem gamifikasi Askara.
+Pengguna memperoleh **Tinta** dari setiap latihan, yang digunakan untuk membuka level berikutnya dan karakter baru dalam sistem gamifikasi Aksara.
 
 ---
 
@@ -53,5 +53,5 @@ Kedua permainan diadaptasi dari materi pada setiap modul, dan hanya bisa diakses
 
 ---
 
-> 🌟 *Askara mengubah proses belajar kebahasaan menjadi pengalaman yang hidup, menyenangkan, dan bermakna.*  
+> 🌟 *Aksara mengubah proses belajar kebahasaan menjadi pengalaman yang hidup, menyenangkan, dan bermakna.*  
 > “Dari aksara, lahir cahaya pengetahuan.” ✨
