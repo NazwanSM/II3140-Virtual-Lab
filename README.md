@@ -16,7 +16,7 @@
   <h3 align="center">Aksara : Virtual Lab for Tata Tulis Karya Ilmiah</h3>
 
    <div align="center">
-     Berikut tautan project kami dapat dilihat pada <a href="aksara-virtual-lab.vercel.app" target="_blank"><b>Website</b></a>. Feel free to leave a suggestion!
+     Berikut tautan project kami dapat dilihat pada <a href="https://aksara-virtual-lab.vercel.app" target="_blank"><b>Website</b></a>. Feel free to leave a suggestion!
     </div>
 </div>
 
