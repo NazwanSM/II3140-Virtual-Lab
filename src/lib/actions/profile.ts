@@ -57,6 +57,7 @@ export async function selectArtwork(artworkId: string) {
     if (!existingUnlock) {
         const { error: unlockError } = await supabase
             .from('user_artworks')
+            // @ts-expect-error Supabase type generation issue
             .insert({
                 user_id: user.id,
                 artwork_id: artworkId,
@@ -70,6 +71,7 @@ export async function selectArtwork(artworkId: string) {
 
     await supabase
         .from('user_artworks')
+        // @ts-expect-error Supabase type generation issue
         .update({ is_active: false })
         .eq('user_id', user.id);
 
@@ -89,6 +91,7 @@ export async function updateProfile(data: { full_name?: string; username?: strin
 
     const { error } = await supabase
         .from('profiles')
+        // @ts-expect-error Supabase type generation issue
         .update(data)
         .eq('id', user.id);
 
@@ -98,6 +101,34 @@ export async function updateProfile(data: { full_name?: string; username?: strin
 
     revalidatePath('/profile');
     revalidatePath('/dashboard');
+
+    return { success: true };
+}
+
+export async function updatePassword(currentPassword: string, newPassword: string) {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { success: false, error: 'User not authenticated' };
+    }
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user.email!,
+        password: currentPassword,
+    });
+
+    if (signInError) {
+        return { success: false, error: 'Password lama salah' };
+    }
+
+    const { error: updateError } = await supabase.auth.updateUser({
+        password: newPassword,
+    });
+
+    if (updateError) {
+        return { success: false, error: 'Gagal mengubah password' };
+    }
 
     return { success: true };
 }

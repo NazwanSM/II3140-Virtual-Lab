@@ -21,6 +21,8 @@ interface Artworks {
     required_tinta: number;
     image_locked_url: string;
     image_url: string;
+    image_hover_url: string;
+    image_locked_hover_url: string;
     description: string;
     is_unlocked: boolean;
 }
@@ -30,21 +32,33 @@ interface ProfilePageProps {
     artworks: Artworks[];
     onSelectArtwork: (artworkId: string) => Promise<{ success: boolean }>;
     onUpdateProfile: (data: { full_name?: string; username?: string }) => Promise<{ success: boolean }>;
+    onUpdatePassword: (currentPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 export default function ProfilePage({ 
     profile, 
     artworks,
     onSelectArtwork,
-    onUpdateProfile 
+    onUpdateProfile,
+    onUpdatePassword
 }: ProfilePageProps) {
     const router = useRouter();
     const [isEditingName, setIsEditingName] = useState(false);
-    const [isEditingUsername, setIsEditingUsername] = useState(false);
     const [isEditingPassword, setIsEditingPassword] = useState(false);
     const [fullName, setFullName] = useState(profile.full_name || '');
-    const [username, setUsername] = useState(profile.username || '');
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [passwordSuccess, setPasswordSuccess] = useState('');
     const [selectedArtwork, setSelectedArtwork] = useState<string | null>(profile.active_artwork_id);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
+    const menuItems = [
+            { label: 'Profile', icon: '/profile.png', action: () => router.push('/profile') },
+            { label: 'Home', icon: '/home.png', action: () => router.push('/dashboard') },
+            { label: 'Logout', icon: '/logout.png', action: () => router.push('/login') },
+        ];
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -60,9 +74,39 @@ export default function ProfilePage({
         setIsEditingName(false);
     };
 
-    const handleSaveUsername = async () => {
-        await onUpdateProfile({ username });
-        setIsEditingUsername(false);
+    const handleSavePassword = async () => {
+        setPasswordError('');
+        setPasswordSuccess('');
+
+        if (!currentPassword || !newPassword || !confirmPassword) {
+            setPasswordError('Semua field harus diisi');
+            return;
+        }
+
+        if (newPassword.length < 6) {
+            setPasswordError('Password baru minimal 6 karakter');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setPasswordError('Password baru dan konfirmasi tidak cocok');
+            return;
+        }
+
+        const result = await onUpdatePassword(currentPassword, newPassword);
+        
+        if (result.success) {
+            setPasswordSuccess('Password berhasil diubah!');
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+            setTimeout(() => {
+                setIsEditingPassword(false);
+                setPasswordSuccess('');
+            }, 2000);
+        } else {
+            setPasswordError(result.error || 'Gagal mengubah password');
+        }
     };
 
     const handleArtworkSelect = async (artworkId: string) => {
@@ -77,14 +121,60 @@ export default function ProfilePage({
 
     return (
         <div className="dashboard-page p-6 md:p-10 font-sans" >
+            {isMenuOpen && (
+                    <div 
+                        className="fixed inset-0 z-40 transition-opacity duration-300"
+                        onClick={() => setIsMenuOpen(false)}
+                    />
+                )}
+
             <header className="flex justify-between items-center mb-8 relative z-10 mx-auto">
                 <div className="flex items-center gap-4 md:gap-6">
                     <button onClick={() => router.push("/dashboard")} className="cursor-pointer hover:opacity-90 transition-opacity">
                         <Image src="/LogoAksaraSmall.png" alt="Logo" width={128} height={32} />
                     </button>
                 </div>
-                <div className="shrink-0">
-                    <button className="cursor-pointer hover:scale-105 transition-transform">
+                <div className="shrink-0 relative">
+                    {menuItems.map((item, index) => {
+                        const startAngle = 90; 
+                        const endAngle = 180;
+                        const angleRange = endAngle - startAngle;
+                        const angle = startAngle + (index * (angleRange / (menuItems.length - 1)));
+                        const radius = 90; 
+                        const x = Math.cos((angle * Math.PI) / 180) * radius;
+                        const y = Math.sin((angle * Math.PI) / 180) * radius + 30;
+                        
+                        return (
+                            <button
+                                key={index}
+                                onClick={() => {
+                                    item.action();
+                                    setIsMenuOpen(false);
+                                }}
+                                className={`absolute flex items-center justify-center cursor-pointer transition-all duration-500 ease-out hover:scale-110 z-50 ${
+                                    isMenuOpen 
+                                        ? 'opacity-100 pointer-events-auto' 
+                                        : 'opacity-0 pointer-events-none scale-0'
+                                }`}
+                                style={{
+                                    transform: isMenuOpen 
+                                        ? `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))` 
+                                        : 'translate(-50%, -50%)',
+                                    transitionDelay: isMenuOpen ? `${index * 50}ms` : '0ms'
+                                }}
+                                title={item.label}
+                            >
+                                <Image src={item.icon} alt={item.label} width={109} height={109} />
+                            </button>
+                        );
+                    })}
+                    
+                    <button 
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        className={`cursor-pointer hover:scale-105 transition-all duration-300 relative z-50 ${
+                            isMenuOpen ? 'rotate-45' : 'rotate-0'
+                        }`}
+                    >
                         <Image src="/plusButton.png" alt="Tambah" width={56} height={56} />
                     </button>
                 </div>
@@ -116,7 +206,6 @@ export default function ProfilePage({
                                     <span className="text-gray-600 italic">Halo, </span>
                                     <span className="font-bold text-gray-900">{profile.full_name || 'Aksara Learner'}!</span>
                                 </p>
-                                <p className="text-gray-700 font-semibold">{profile.username || profile.email}</p>
                                 <p className="text-gray-600 text-sm">{profile.email}</p>
                             </div>
 
@@ -132,19 +221,13 @@ export default function ProfilePage({
 
                         <div className="flex flex-col gap-3">
                             <button
-                                onClick={() => setIsEditingName(!isEditingName)}
-                                className="px-6 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-2xl font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer text-center"
+                                onClick={() => {setIsEditingName(!isEditingName); setIsEditingPassword(false);}}
+                                className="px-6 py-5 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-2xl font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer text-center"
                             >
-                                Ubah Nama Pengguna
+                                Ubah Username
                             </button>
                             <button
-                                onClick={() => setIsEditingUsername(!isEditingUsername)}
-                                className="px-6 py-2 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-2xl font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer text-center"
-                            >
-                                Ubah Nama Lengkap
-                            </button>
-                            <button
-                                onClick={() => setIsEditingPassword(!isEditingPassword)}
+                                onClick={() => {setIsEditingPassword(!isEditingPassword); setIsEditingName(false);}}
                                 className="px-6 py-5 border-2 bg-[#F5E6E8] border-[#D4A5B0] rounded-2xl font-semibold text-[#8B4A5E] hover:bg-[#EDD5D9] transition-colors duration-200 cursor-pointer text-center"
                             >
                                 Ubah Kata Sandi
@@ -153,14 +236,14 @@ export default function ProfilePage({
                     </div>
 
                     {isEditingName && (
-                        <div className="mt-6 pt-6 border-t-4 border-gray-800">
-                            <label className="block text-gray-900 font-semibold mb-2">Nama Lengkap Baru</label>
-                            <div className="flex gap-3">
+                        <div className="z-10 bg-white border-4 border-gray-800 rounded-3xl p-6 shadow-xl">
+                            <label className="block text-gray-900 font-semibold mb-2">Username Baru</label>
+                            <div className="grid gap-3">
                                 <input
                                     type="text"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)}
-                                    className="flex-1 px-4 py-2 border-3 border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#4A92F3]"
+                                    className="flex-1 px-2 py-2 border-3 border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#4A92F3] text-gray-900"
                                     placeholder="Masukkan nama lengkap"
                                 />
                                 <button
@@ -179,38 +262,78 @@ export default function ProfilePage({
                         </div>
                     )}
 
-                    {isEditingUsername && (
-                        <div className="mt-6 pt-6 border-t-4 border-gray-800">
-                            <label className="block text-gray-900 font-semibold mb-2">Username Baru</label>
-                            <div className="flex gap-3">
-                                <input
-                                    type="text"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    className="flex-1 px-4 py-2 border-3 border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#4A92F3]"
-                                    placeholder="Masukkan username"
-                                />
-                                <button
-                                    onClick={handleSaveUsername}
-                                    className="px-6 py-2 bg-linear-to-r from-[#66BB6A] to-[#43A047] border-3 border-gray-800 rounded-2xl font-semibold text-white hover:scale-105 transition-all cursor-pointer"
-                                >
-                                    Simpan
-                                </button>
-                                <button
-                                    onClick={() => setIsEditingUsername(false)}
-                                    className="px-6 py-2 bg-gray-200 border-3 border-gray-800 rounded-2xl font-semibold text-gray-900 hover:bg-gray-300 transition-all cursor-pointer"
-                                >
-                                    Batal
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
                     {isEditingPassword && (
-                        <div className="mt-6 pt-6 border-t-4 border-gray-800">
-                            <p className="text-gray-700 text-center py-4">
-                                Fitur ubah password akan segera tersedia.
-                            </p>
+                        <div className="z-10 bg-white border-4 border-gray-800 rounded-3xl p-6 shadow-xl">
+                            <h3 className="text-lg font-bold text-gray-900 mb-4">Ubah Kata Sandi</h3>
+                            
+                            {passwordError && (
+                                <div className="bg-red-100 border-2 border-red-400 text-red-700 px-4 py-3 rounded-2xl mb-4">
+                                    {passwordError}
+                                </div>
+                            )}
+                            
+                            {passwordSuccess && (
+                                <div className="bg-green-100 border-2 border-green-400 text-green-700 px-4 py-3 rounded-2xl mb-4">
+                                    {passwordSuccess}
+                                </div>
+                            )}
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-gray-900 font-semibold mb-2">Password Lama</label>
+                                    <input
+                                        type="password"
+                                        value={currentPassword}
+                                        onChange={(e) => setCurrentPassword(e.target.value)}
+                                        className="w-full px-4 py-3 border-2 border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#4A92F3] text-gray-900"
+                                        placeholder="Masukkan password lama"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-gray-900 font-semibold mb-2">Password Baru</label>
+                                    <input
+                                        type="password"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                        className="w-full px-4 py-3 border-2 border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#4A92F3] text-gray-900"
+                                        placeholder="Masukkan password baru (min. 6 karakter)"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-gray-900 font-semibold mb-2">Konfirmasi Password Baru</label>
+                                    <input
+                                        type="password"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        className="w-full px-4 py-3 border-2 border-gray-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#4A92F3] text-gray-900"
+                                        placeholder="Ketik ulang password baru"
+                                    />
+                                </div>
+
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={handleSavePassword}
+                                        className="flex-1 px-6 py-3 bg-linear-to-r from-[#66BB6A] to-[#43A047] border-2 border-gray-800 rounded-2xl font-semibold text-white hover:scale-105 transition-all cursor-pointer"
+                                    >
+                                        Simpan
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setIsEditingPassword(false);
+                                            setCurrentPassword('');
+                                            setNewPassword('');
+                                            setConfirmPassword('');
+                                            setPasswordError('');
+                                            setPasswordSuccess('');
+                                        }}
+                                        className="flex-1 px-6 py-3 bg-gray-200 border-2 border-gray-800 rounded-2xl font-semibold text-gray-900 hover:bg-gray-300 transition-all cursor-pointer"
+                                    >
+                                        Batal
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -254,7 +377,13 @@ export default function ProfilePage({
                                             fill
                                             className="object-cover"
                                         />
-                                        
+                                        <Image
+                                            src={isUnlocked ? artwork.image_hover_url : artwork.image_locked_hover_url}
+                                            alt="Artwork Image"
+                                            fill
+                                            className="object-cover opacity-0 hover:opacity-100 transition-opacity"
+                                        />
+
                                         {!isUnlocked && (
                                             <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
                                                 <div className="w-16 h-16 bg-yellow-500 rounded-full flex items-center justify-center mb-2">

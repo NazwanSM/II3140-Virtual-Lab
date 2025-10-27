@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import ProfilePageComponent from '@/components/pages/profilePage';
-import { selectArtwork, updateProfile } from '@/lib/actions/profile';
+import { selectArtwork, updateProfile, updatePassword } from '@/lib/actions/profile';
 
 interface Profile {
     full_name: string | null;
@@ -19,6 +19,8 @@ interface Artworks {
     required_tinta: number;
     image_locked_url: string;
     image_url: string;
+    image_hover_url: string;
+    image_locked_hover_url: string;
     description: string;
 }
 
@@ -69,17 +71,21 @@ export default async function Profile() {
 
     const firstArt = artworks[0];
     if (firstArt && !unlockedIds.has(firstArt.id)) {
-        await supabase
+        const insertData = {
+            user_id: user.id,
+            artwork_id: firstArt.id,
+            is_active: !fullProfile.active_artwork_id
+        };
+        
+        const { error } = await supabase
             .from('user_artworks')
-            .insert({
-                user_id: user.id,
-                artwork_id: firstArt.id,
-                is_active: !fullProfile.active_artwork_id
-            });
+            // @ts-expect-error Supabase type generation issue
+            .insert([insertData]);
 
-        if (!fullProfile.active_artwork_id) {
+        if (!error && !fullProfile.active_artwork_id) {
             await supabase
                 .from('profiles')
+                // @ts-expect-error Supabase type generation issue  
                 .update({ active_artwork_id: firstArt.id })
                 .eq('id', user.id);
         }
@@ -91,6 +97,7 @@ export default async function Profile() {
             artworks={artworks}
             onSelectArtwork={selectArtwork}
             onUpdateProfile={updateProfile}
+            onUpdatePassword={updatePassword}
         />
     );
 }
