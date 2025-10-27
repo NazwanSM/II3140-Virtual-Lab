@@ -1,9 +1,8 @@
 import Image from 'next/image';
-import LatihanInfoCard from '@/components/ui/latihanCard';
 import { redirect} from 'next/navigation';
 import Link from 'next/dist/client/link';
 import { createClient } from '@/lib/supabase/server';
-import GameCard from '@/components/ui/GameCard';
+import GameCard from '@/components/ui/gameCard';
 
 interface Profile {
     full_name: string | null;
