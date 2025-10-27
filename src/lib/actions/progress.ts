@@ -3,6 +3,16 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
+interface ExistingProgress {
+    progress: number;
+    modul_viewed: boolean;
+    video_viewed: boolean;
+}
+
+interface Profile {
+    tinta: number;
+}
+
 export async function updateModuleProgress(moduleId: string, progressType: 'modul' | 'video') {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -22,34 +32,37 @@ export async function updateModuleProgress(moduleId: string, progressType: 'modu
         let shouldAddTinta = false;
 
         if (existingProgress) {
-            const currentProgress = (existingProgress as any).progress || 0;
+            const progress = existingProgress as unknown as ExistingProgress;
+            const currentProgress = progress.progress || 0;
             let newProgress = currentProgress;
 
-            if (progressType === 'modul' && !(existingProgress as any).modul_viewed) {
+            if (progressType === 'modul' && !progress.modul_viewed) {
                 newProgress += 20;
                 shouldAddTinta = true;
                 
                 await supabase
                     .from('learning_progress')
+                    // @ts-expect-error Supabase type generation issue
                     .update({ 
                         progress: newProgress,
                         modul_viewed: true,
                         completed: newProgress >= 100
-                    } as any)
+                    })
                     .eq('user_id', user.id)
                     .eq('module_id', moduleId)
                     .select();
-            } else if (progressType === 'video' && !(existingProgress as any).video_viewed) {
+            } else if (progressType === 'video' && !progress.video_viewed) {
                 newProgress += 20;
                 shouldAddTinta = true;
                 
                 await supabase
                     .from('learning_progress')
+                    // @ts-expect-error Supabase type generation issue
                     .update({ 
                         progress: newProgress,
                         video_viewed: true,
                         completed: newProgress >= 100
-                    } as any)
+                    })
                     .eq('user_id', user.id)
                     .eq('module_id', moduleId)
                     .select();
@@ -60,6 +73,7 @@ export async function updateModuleProgress(moduleId: string, progressType: 'modu
             
             await supabase
                 .from('learning_progress')
+                // @ts-expect-error Supabase type generation issue
                 .insert({
                     user_id: user.id,
                     module_id: moduleId,
@@ -67,7 +81,7 @@ export async function updateModuleProgress(moduleId: string, progressType: 'modu
                     modul_viewed: progressType === 'modul',
                     video_viewed: progressType === 'video',
                     completed: false
-                } as any)
+                })
                 .select();
         }
 
@@ -79,10 +93,12 @@ export async function updateModuleProgress(moduleId: string, progressType: 'modu
                 .single();
 
             if (profile) {
-                const currentTinta = (profile as any).tinta || 0;
+                const profileData = profile as unknown as Profile;
+                const currentTinta = profileData.tinta || 0;
                 await supabase
                     .from('profiles')
-                    .update({ tinta: currentTinta + 500 } as any)
+                    // @ts-expect-error Supabase type generation issue
+                    .update({ tinta: currentTinta + 500 })
                     .eq('id', user.id);
             }
         }
@@ -91,7 +107,7 @@ export async function updateModuleProgress(moduleId: string, progressType: 'modu
         revalidatePath('/dashboard');
         
         return { success: true };
-    } catch (error) {
+    } catch {
         return { error: 'Failed to update progress' };
     }
 }

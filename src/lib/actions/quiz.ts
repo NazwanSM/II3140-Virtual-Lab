@@ -11,6 +11,15 @@ interface SubmitQuizResult {
     error?: string;
 }
 
+interface ExistingProgress {
+    progress: number;
+    [key: string]: boolean | number;
+}
+
+interface Profile {
+    tinta: number;
+}
+
 export async function submitQuiz(
     moduleId: string,
     difficulty: string,
@@ -37,6 +46,7 @@ export async function submitQuiz(
 
         await supabase
             .from('quiz_results')
+            // @ts-expect-error Supabase type generation issue
             .upsert({
                 user_id: user.id,
                 module_id: moduleId,
@@ -46,7 +56,7 @@ export async function submitQuiz(
                 wrong_answers: wrongAnswers,
                 total_questions: questions.length,
                 completed_at: new Date().toISOString()
-            } as any, {
+            }, {
                 onConflict: 'user_id,module_id,difficulty'
             });
 
@@ -67,19 +77,21 @@ export async function submitQuiz(
                 .single();
 
             if (existingProgress) {
-                const currentProgress = (existingProgress as any).progress || 0;
-                const quizCompleted = (existingProgress as any)[`${difficulty}_completed`] || false;
+                const progress = existingProgress as unknown as ExistingProgress;
+                const currentProgress = progress.progress || 0;
+                const quizCompleted = progress[`${difficulty}_completed`] as boolean || false;
                 
                 if (!quizCompleted) {
                     const newProgress = Math.min(100, currentProgress + 20);
                     
                     await supabase
                         .from('learning_progress')
+                        // @ts-expect-error Supabase type generation issue
                         .update({
                             progress: newProgress,
                             [`${difficulty}_completed`]: true,
                             completed: newProgress >= 100
-                        } as any)
+                        })
                         .eq('user_id', user.id)
                         .eq('module_id', moduleId);
                 }
@@ -94,10 +106,12 @@ export async function submitQuiz(
                 .single();
 
             if (profile) {
-                const currentTinta = (profile as any).tinta || 0;
+                const profileData = profile as unknown as Profile;
+                const currentTinta = profileData.tinta || 0;
                 await supabase
                     .from('profiles')
-                    .update({ tinta: currentTinta + tintaReward } as any)
+                    // @ts-expect-error Supabase type generation issue
+                    .update({ tinta: currentTinta + tintaReward })
                     .eq('id', user.id);
             }
         }
@@ -107,7 +121,7 @@ export async function submitQuiz(
         revalidatePath('/belajar');
 
         return { success: true, correctAnswers, wrongAnswers, score };
-    } catch (error) {
+    } catch {
         return { success: false, correctAnswers: 0, wrongAnswers: 0, score: 0, error: 'Failed to submit quiz' };
     }
 }
