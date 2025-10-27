@@ -13,6 +13,7 @@ interface Module {
     id: string;
     module_number: number;
     title: string;
+    thumbnail_url: string | null;
 }
 
 interface QuizResult {
@@ -37,7 +38,7 @@ export default async function Latihan() {
 
     const { data: modules } = await supabase
         .from('modules')
-        .select('id, module_number, title')
+        .select('id, module_number, title, thumbnail_url')
         .order('module_number') as { data: Module[] | null };
 
     const { data: quizResults } = await supabase
@@ -56,7 +57,7 @@ export default async function Latihan() {
             id: module.id,
             moduleNumber: module.module_number,
             title: module.title,
-            thumbnail: "/frameMateri.png",
+            thumbnail: module.thumbnail_url || "/frameMateri.png",
             difficulty: 'Mudah' as const,
             status: 'available' as const,
             lastScore: scoreMap.get(`${module.id}-mudah`) || null,
@@ -65,7 +66,7 @@ export default async function Latihan() {
             id: module.id,
             moduleNumber: module.module_number,
             title: module.title,
-            thumbnail: "/frameMateri.png",
+            thumbnail: module.thumbnail_url || "/frameMateri.png",
             difficulty: 'Sedang' as const,
             status: 'available' as const,
             lastScore: scoreMap.get(`${module.id}-sedang`) || null,
@@ -74,7 +75,7 @@ export default async function Latihan() {
             id: module.id,
             moduleNumber: module.module_number,
             title: module.title,
-            thumbnail: "/frameMateri.png",
+            thumbnail: module.thumbnail_url || "/frameMateri.png",
             difficulty: 'Sulit' as const,
             status: 'available' as const,
             lastScore: scoreMap.get(`${module.id}-sulit`) || null,
@@ -92,12 +93,12 @@ export default async function Latihan() {
                     </Link>
                     <div className="text-left">
                         <p className="text-base md:text-lg">
-                            <span className="text-gray-600">Halo, </span>
+                            <span className="text-gray-600 italic">Halo, </span>
                             <Link href="/profile" className="font-bold text-gray-900 hover:underline">
                                 {profile?.full_name || 'Aksara Learner'}
                             </Link>
                         </p>
-                        <div className="bg-[#d4af378a] rounded-full px-4 py-0 flex items-center gap-2 shadow-md">
+                        <div className="bg-[#d4af378a] rounded-full px-4 py-1 flex items-center gap-2 shadow-md">
                             <Image src="/bulu.png" alt="tinta" width={20} height={20} />
                             <span className="text-sm font-bold text-white">{profile?.tinta || 0} tinta</span>
                         </div>
@@ -151,7 +152,7 @@ export default async function Latihan() {
                         moduleId={latihan.id}
                         moduleNumber={latihan.moduleNumber}
                         title={latihan.title}
-                        thumbnail="/frameLatihan.png"
+                        thumbnail={latihan.thumbnail}
                         difficulty={latihan.difficulty}
                         status={latihan.status}
                         lastScore={latihan.lastScore}

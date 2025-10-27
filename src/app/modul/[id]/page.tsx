@@ -41,12 +41,7 @@ export default async function ModulPageWrapper({ params }: { params: Promise<{ i
         .eq('id', resolvedParams.id)
         .single() as { data: { id: number; module_number: number; title: string; description: string; content: ModuleContent } | null; error: Error | null };
 
-    console.log('Module data:', module);
-    console.log('Module error:', error);
-    console.log('Params ID:', resolvedParams.id);
-
     if (!module || error) {
-        console.error('Module not found or error:', error);
         notFound();
     }
 

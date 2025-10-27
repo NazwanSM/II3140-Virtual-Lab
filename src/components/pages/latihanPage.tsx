@@ -33,7 +33,6 @@ interface QuizPageProps {
 }
 
 export default function QuizPage({
-    moduleId,
     moduleTitle,
     difficulty,
     questions,
@@ -105,12 +104,12 @@ export default function QuizPage({
                     </button>
                     <div className="text-left">
                         <p className="text-base md:text-lg">
-                            <span className="text-gray-600">Halo, </span>
-                            <button onClick={() => router.push("/profile")} className="font-bold text-gray-900 hover:underline cursor-pointer">
+                            <span className="text-gray-600 italic">Halo, </span>
+                            <button onClick={() => router.push("/profile")} className="font-bold text-gray-900 hover:underline">
                                 {profile?.full_name || 'Aksara Learner'}
                             </button>
                         </p>
-                        <div className="bg-[#d4af378a] rounded-full px-4 py-0 flex items-center gap-2 shadow-md">
+                        <div className="bg-[#d4af378a] rounded-full px-4 py-1 flex items-center gap-2 shadow-md">
                             <Image src="/bulu.png" alt="tinta" width={20} height={20} />
                             <span className="text-sm font-bold text-white">{profile?.tinta || 0} tinta</span>
                         </div>

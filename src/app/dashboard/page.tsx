@@ -34,15 +34,21 @@ export default async function Dashboard() {
 
     const { data: learningProgress } = await supabase
         .from('learning_progress')
-        .select('module_id, progress, completed, modul_viewed, video_viewed, quiz_score')
+        .select('module_id, progress, completed, modul_viewed, video_viewed')
         .eq('user_id', user.id) as { data: LearningProgress[] | null };
 
-    const completedModules = learningProgress?.filter((p) => p.completed).length || 0;
+    const { data: quizResults } = await supabase
+        .from('quiz_results')
+        .select('module_id, difficulty, score')
+        .eq('user_id', user.id) as { data: { module_id: string; difficulty: string; score: number }[] | null };
+
+    const completedModules = learningProgress?.filter((p) => p.modul_viewed === true).length || 0;
     const totalModules = 3;
     const belajarProgress = `${completedModules}/${totalModules}`;
 
-    const completedQuizzes = learningProgress?.filter((p) => p.quiz_score !== null && p.quiz_score !== undefined).length || 0;
-    const latihProgress = `${completedQuizzes}/${totalModules}`;
+    const completedQuizzes = quizResults?.filter((q) => q.score !== null && q.score !== undefined).length || 0;
+    const totalQuiz = 9;
+    const latihProgress = `${completedQuizzes}/${totalQuiz}`;
 
     const level = Math.floor((profile?.tinta || 0) / 100) + 1;
 
@@ -67,7 +73,7 @@ export default async function Dashboard() {
                     </div>
                 </div>
                 <div className="shrink-0">
-                    <button className="cursor-pointer hover:scale-105 transition-transform">
+                    <button className="cursor-pointer hover:scale-105 transition-all hover:rotate-30">
                         <Image src="/plusButton.png" alt="Tambah" width={56} height={56} />
                     </button>
                 </div>
